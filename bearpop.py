@@ -5,6 +5,16 @@ m = 10
 v = 0.1
 N = 100
 
+bearmaxinit=5
+# return list of tuples of initial bear locations
+def initialize():
+  bears = [[[(i,j) for num in range(np.random.random_integers(bearmaxinit))] for j in range(m)] for i in range(n)]
+  return bears
+
+def process(bears, k):
+  print k
+  print bears
+
 def main():
   # get initial bear locations
   bears = initialize()
@@ -52,7 +62,6 @@ def main():
 
   return R
 
-
 def Pmove(Nfrom, Nto, Bmap):
   return v * (Nfrom - Nto) * H(Nfrom - Nto)
 
@@ -60,11 +69,6 @@ def H(x):
   if x >= 0:
     return 1
   return 0
-
-# return list of tuples of initial bear locations
-def initialize():
-  bears = []
-  return bears
 
 # pre: reduce(add, Plist) <= 1
 def choose(Plist):
@@ -76,3 +80,6 @@ def choose(Plist):
       return i
     choice -= Plist[i]
   return -1
+
+if __name__ == "__main__":
+  main()
