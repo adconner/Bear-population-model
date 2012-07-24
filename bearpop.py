@@ -1,4 +1,5 @@
 import numpy as np
+import time
 
 n = 5
 m = 10
@@ -24,6 +25,7 @@ def initialize():
 def process(bears, k):
   print k
   prettyprint(bears)
+  time.sleep(0.01)
 
 def main():
   # get initial bear locations
