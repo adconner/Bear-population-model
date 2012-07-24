@@ -1,10 +1,13 @@
 import numpy as np
 import time
 
-n = 5
-m = 10
-v = 0.01
-N = 1000
+n = 21 # rows
+m = 21 # columns
+v = 0.001 # bear velocity (cycles/bears)
+N = 10000 # number of time cycles
+Bn = 100 # number of bears
+
+# todo: add random walk element? potential function (easily implemented in dead bear units)
 
 # fundamental function of model, compute probability of move to new square
 def Pmove(Nfrom, Nto, Bmap):
@@ -13,14 +16,8 @@ def Pmove(Nfrom, Nto, Bmap):
 bearmaxinit=3
 # return list of tuples of initial bear locations
 def initialize():
-  def flatten(l):
-    if not isinstance(l, list):
-      return [l]
-    elif l == []:
-      return []
-    else:
-      return flatten(l[0]) + flatten(l[1:])
-  return flatten([[[(i,j) for num in range(np.random.random_integers(bearmaxinit+1)-1)] for j in range(m)] for i in range(n)])
+  return [(np.random.random_integers(n)-1, np.random.random_integers(m)-1) for num in range(Bn)]
+  #return [(10,10) for num in range(Bn)]
 
 def process(bears, k):
   print k
@@ -104,11 +101,18 @@ def getBmap(bears):
     Bmap[b] += 1
   return Bmap
 
+def colormap(i):
+  colormap = ['gray', 'white', 'yellow', 'red', 'green', 'cyan', 'blue', 'magenta']
+  if i<len(colormap):
+    return colormap[i]
+  else:
+    return 'magenta'
+
 def prettyprint(bears):
   Bmap = getBmap(bears)
   for i in range(n):
     for j in range(m):
-      print '{0:{width}}'.format(Bmap[i,j], width=len(str(len(bears)))+1),
+      print colored('{0:{width}}'.format(Bmap[i,j], width=1), colormap(Bmap[i,j])),
     print
 
 
