@@ -1,0 +1,33 @@
+#!/usr/bin/python2
+
+import numpy as np
+from pylab import *
+
+# keep track of individual bears
+# use diffusion with potential function
+
+# function computes kth bear's new location given locations of all bears and arbitrary environmental effects
+# potential is an nxm matrix 
+def nextloc(k, bears, bmap, hmap):
+
+
+def simstart(tmax):
+  # list of pairs, identification of bears
+  bears=[]
+
+  # nxm map of bears for quick computation
+  bearmap
+
+  # nxm map of attractor/deflector potential 
+  hmap
+
+  for tn in range(tmax):
+
+
+
+
+
+
+
+
+
