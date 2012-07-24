@@ -8,8 +8,14 @@ N = 100
 bearmaxinit=5
 # return list of tuples of initial bear locations
 def initialize():
-  bears = [[[(i,j) for num in range(np.random.random_integers(bearmaxinit))] for j in range(m)] for i in range(n)]
-  return bears
+  def flatten(l):
+    if not isinstance(l, list):
+      return [l]
+    elif l == []:
+      return []
+    else:
+      return flatten(l[0]) + flatten(l[1:])
+  return flatten([[[(i,j) for num in range(np.random.random_integers(bearmaxinit))] for j in range(m)] for i in range(n)])
 
 def process(bears, k):
   print k
@@ -30,13 +36,13 @@ def main():
     for bi in range(len(bears)):
       Pu = Pd = Pl = Pr = 0
       if bears[k][0]>0:
-        Pl = Pmove(Bmap[bears[k]], Bmap[ bears[k][0] - 1, bears[k][1] ])
+        Pl = Pmove(Bmap[bears[k]], Bmap[ bears[k][0] - 1, bears[k][1] ], Bmap)
       if bears[k][0]<m-1:
-        Pr = Pmove(Bmap[bears[k]], Bmap[ bears[k][0] + 1, bears[k][1] ])
+        Pr = Pmove(Bmap[bears[k]], Bmap[ bears[k][0] + 1, bears[k][1] ], Bmap)
       if bears[k][1]>0:
-        Pu = Pmove(Bmap[bears[k]], Bmap[ bears[k][0], bears[k][1] - 1 ])
+        Pu = Pmove(Bmap[bears[k]], Bmap[ bears[k][0], bears[k][1] - 1 ], Bmap)
       if bears[k][1]<n-1:
-        Pd = Pmove(Bmap[bears[k]], Bmap[ bears[k][0], bears[k][1] + 1 ])
+        Pd = Pmove(Bmap[bears[k]], Bmap[ bears[k][0], bears[k][1] + 1 ], Bmap)
 
       R[k] += Pl + Pr + Pu + Pd
 
