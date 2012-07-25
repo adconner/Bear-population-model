@@ -38,12 +38,17 @@ def process(bears, k):
 def getPotential():
   PP = np.zeros([n,m])
   # this example will cause a net migration to the right with some arbitrary potential wells
-  for i in range(m):
-    PP[:,i] = -i/3.
+  #for i in range(m):
+    #PP[:,i] = -i/3.
 
-  addLinearWell(PP, (n // 2,     m // 3    ), m / 2, .3 ) 
-  addLinearWell(PP, (3 * n // 4, 2 * m // 3), m / 4, .5  ) 
-  addLinearWell(PP, (n // 4,     2 * m // 3), m / 4, .5  ) 
+  #addLinearWell(PP, (n // 2,     m // 3    ), m / 2, .3 ) 
+  #addLinearWell(PP, (3 * n // 4, 2 * m // 3), m / 4, .5  ) 
+  #addLinearWell(PP, (n // 4,     2 * m // 3), m / 4, .5  ) 
+
+  addLinearWellLine(PP, (n // 2,     0), (n // 2,     m), m / 4, 1  ) 
+  #addLinearWellLine(PP, (0,     m // 2), (n,     m // 2), n / 4, 1  ) 
+  #addLinearWell(PP, (n // 2,     m // 2), m / 4, -1  ) 
+  # not exactly a cross but close
 
   return PP
 
@@ -135,6 +140,23 @@ def l2(i, j):
 def addLinearWell(PP, i, r, a):
   for j in [(x,y) for x in range(n) for y in range(m)]:
     d = l2(i,j)
+    if d <= r:
+      PP[j] -= a * (r - d)
+
+def addLinearWellLine(PP, start, end, r, a):
+  start = np.array(start, 'f')
+  end = np.array(end, 'f')
+  dse = l2(start, end)
+  unitdiff = (end - start) / dse
+  for j in [np.array([x,y]) for x in range(n) for y in range(m)]:
+    proj = j.dot(unitdiff)
+    if proj <= 0:
+      d = l2(start, j)
+    elif proj<= dse:
+      orth = j - proj * unitdiff
+      d = orth.dot(orth) ** 0.5
+    else:
+      d = l2(end, j)
     if d <= r:
       PP[j] -= a * (r - d)
 
