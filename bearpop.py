@@ -14,10 +14,8 @@ redraw = 15 # frequency of redraw
 
 # potential matrix, high values are undesirable (unstable)
 # measured in dead bear units, since dead bears
-PP = np.zeros([n,m])
-# this example will cause a net migration to the right
-for i in range(m):
-  PP[:,i] = -i/3.
+# this is initialized in main() using getPotential()
+PP = None
 
 # fundamental function of model, compute probability of move to new square
 def Pmove(ifrom, ito, Bmap):
@@ -29,13 +27,25 @@ def Pmove(ifrom, ito, Bmap):
 # return list of tuples of initial bear locations
 def initialize():
   # return [(np.random.random_integers(n)-1, np.random.random_integers(m)-1) for num in range(Bn)]
-  return [(n//2,m//2) for num in range(Bn)]
+  return [(n // 2,m // 2) for num in range(Bn)]
 
 def process(bears, k):
-  if k%redraw == 0:
+  if k % redraw == 0:
     print k
     prettyprint(bears)
     # time.sleep(0.01)
+
+def getPotential():
+  PP = np.zeros([n,m])
+  # this example will cause a net migration to the right with some arbitrary potential wells
+  for i in range(m):
+    PP[:,i] = -i/3.
+
+  addLinearWell(PP, (n // 2,     m // 3    ), m / 3, .6 ) 
+  addLinearWell(PP, (3 * n // 4, 2 * m // 3), m / 4, 1  ) 
+  addLinearWell(PP, (n // 4,     2 * m // 3), m / 4, 1  ) 
+
+  return PP
 
 def main():
   # get initial bear locations
@@ -43,6 +53,10 @@ def main():
 
   # initialize bear map
   Bmap = getBmap(bears)
+
+  # initialize potential well
+  global PP
+  PP = getPotential()
 
   R = []
   for k in range(N):
@@ -114,6 +128,16 @@ def getBmap(bears):
     Bmap[b] += 1
   return Bmap
 
+def l2(i, j):
+  return ((i[0]-j[0])**2 + (i[1]-j[1])**2)**.5
+
+# Potential well, center, radius, slope
+def addLinearWell(PP, i, r, a):
+  for j in [(x,y) for x in range(n) for y in range(m)]:
+    d = l2(i,j)
+    if d <= r:
+      PP[j] -= a * (r - d)
+
 def colormap(i):
   colormap = ['\033[022m\033[39m', '\033[1m\033[32m', '\033[1m\033[31m', '\033[1m\033[35m', '\033[1m\033[34m']
   if i<len(colormap):
@@ -134,7 +158,6 @@ def prettyprint(bears):
     for j in range(m):
       print colormap(Bmap[i,j]) + symbolmap(Bmap[i,j]),
     print
-
 
 if __name__ == "__main__":
   main()
