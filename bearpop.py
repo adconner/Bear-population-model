@@ -2,7 +2,6 @@
 
 import numpy as np
 import time
-import string
 
 n = 21 # rows
 m = 21 # columns
@@ -11,13 +10,20 @@ r = 0.0005 # probability of random walk in a direction
 N = 10000 # number of time cycles
 Bn = 100 # number of bears
 
-# todo: potential function (easily implemented in dead bear units)
+# potential matrix, high values are undesirable (unstable)
+# measured in dead bear units, since dead bears
+PP = np.zeros([n,m])
+# this example will cause a net migration to the right
+for i in range(m):
+  PP[:,i] = -i/3.
 
 # fundamental function of model, compute probability of move to new square
-def Pmove(Nfrom, Nto, Bmap):
-  return v * (Nfrom - Nto) * H(Nfrom - Nto) + r
+def Pmove(ifrom, ito, Bmap):
+  # use a potential model of movement
+  def P(i):
+    return Bmap[i] + PP[i]
+  return v * (P(ifrom) - P(ito)) * H(P(ifrom) - P(ito)) + r
 
-bearmaxinit=3
 # return list of tuples of initial bear locations
 def initialize():
   # return [(np.random.random_integers(n)-1, np.random.random_integers(m)-1) for num in range(Bn)]
@@ -41,13 +47,13 @@ def main():
     for bi in range(len(bears)):
       Pu = Pd = Pl = Pr = 0
       if bears[bi][0]>0:
-        Pu = Pmove(Bmap[bears[bi]], Bmap[ bears[bi][0] - 1, bears[bi][1] ], Bmap)
+        Pu = Pmove(bears[bi], (bears[bi][0] - 1, bears[bi][1]), Bmap)
       if bears[bi][0]<n-1:
-        Pd = Pmove(Bmap[bears[bi]], Bmap[ bears[bi][0] + 1, bears[bi][1] ], Bmap)
+        Pd = Pmove(bears[bi], (bears[bi][0] + 1, bears[bi][1]), Bmap)
       if bears[bi][1]>0:
-        Pl = Pmove(Bmap[bears[bi]], Bmap[ bears[bi][0], bears[bi][1] - 1 ], Bmap)
+        Pl = Pmove(bears[bi], (bears[bi][0], bears[bi][1] - 1), Bmap)
       if bears[bi][1]<m-1:
-        Pr = Pmove(Bmap[bears[bi]], Bmap[ bears[bi][0], bears[bi][1] + 1 ], Bmap)
+        Pr = Pmove(bears[bi], (bears[bi][0], bears[bi][1] + 1), Bmap)
 
       R[k] += Pl + Pr + Pu + Pd
 
