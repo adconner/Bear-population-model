@@ -3,12 +3,14 @@
 import numpy as np
 import time
 
-n = 21 # rows
-m = 21 # columns
-v = 0.002 # bear velocity (cycles/bears)
-r = 0.0005 # probability of random walk in a direction
-N = 10000 # number of time cycles
-Bn = 100 # number of bears
+n = 61 # rows
+m = 61 # columns
+v = 0.02 # bear velocity (cycles/bears)
+r = v/10 # probability of random walk in a direction
+N = 1000000 # number of time cycles
+Bn = 400 # number of bears
+
+redraw = 15 # frequency of redraw
 
 # potential matrix, high values are undesirable (unstable)
 # measured in dead bear units, since dead bears
@@ -30,9 +32,10 @@ def initialize():
   return [(n//2,m//2) for num in range(Bn)]
 
 def process(bears, k):
-  print k
-  prettyprint(bears)
-  time.sleep(0.01)
+  if k%redraw == 0:
+    print k
+    prettyprint(bears)
+    # time.sleep(0.01)
 
 def main():
   # get initial bear locations
