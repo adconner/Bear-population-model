@@ -7,20 +7,21 @@ import string
 n = 21 # rows
 m = 21 # columns
 v = 0.002 # bear velocity (cycles/bears)
+r = 0.0005 # probability of random walk in a direction
 N = 10000 # number of time cycles
 Bn = 100 # number of bears
 
-# todo: add random walk element? potential function (easily implemented in dead bear units)
+# todo: potential function (easily implemented in dead bear units)
 
 # fundamental function of model, compute probability of move to new square
 def Pmove(Nfrom, Nto, Bmap):
-  return v * (Nfrom - Nto) * H(Nfrom - Nto)
+  return v * (Nfrom - Nto) * H(Nfrom - Nto) + r
 
 bearmaxinit=3
 # return list of tuples of initial bear locations
 def initialize():
   # return [(np.random.random_integers(n)-1, np.random.random_integers(m)-1) for num in range(Bn)]
-  return [(10,10) for num in range(Bn)]
+  return [(n//2,m//2) for num in range(Bn)]
 
 def process(bears, k):
   print k
