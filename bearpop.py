@@ -13,7 +13,7 @@ Bn = 400 # number of bears
 redraw = 15 # frequency of redraw
 
 # potential matrix, high values are undesirable (unstable)
-# measured in dead bear units, since dead bears
+# measured in dead bear units
 # this is initialized in main() using getPotential()
 PP = None
 
@@ -26,8 +26,8 @@ def Pmove(ifrom, ito, Bmap):
 
 # return list of tuples of initial bear locations
 def initialize():
-  # return [(np.random.random_integers(n)-1, np.random.random_integers(m)-1) for num in range(Bn)]
-  return [(n // 2,m // 2) for num in range(Bn)]
+  return [(np.random.random_integers(n)-1, np.random.random_integers(m)-1) for num in range(Bn)]
+  #return [(n // 2,m // 2) for num in range(Bn)]
 
 def process(bears, k):
   if k % redraw == 0:
@@ -41,9 +41,9 @@ def getPotential():
   for i in range(m):
     PP[:,i] = -i/3.
 
-  addLinearWell(PP, (n // 2,     m // 3    ), m / 3, .6 ) 
-  addLinearWell(PP, (3 * n // 4, 2 * m // 3), m / 4, 1  ) 
-  addLinearWell(PP, (n // 4,     2 * m // 3), m / 4, 1  ) 
+  addLinearWell(PP, (n // 2,     m // 3    ), m / 2, .3 ) 
+  addLinearWell(PP, (3 * n // 4, 2 * m // 3), m / 4, .5  ) 
+  addLinearWell(PP, (n // 4,     2 * m // 3), m / 4, .5  ) 
 
   return PP
 
