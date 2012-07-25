@@ -26,8 +26,8 @@ def Pmove(ifrom, ito, Bmap):
 
 # return list of tuples of initial bear locations
 def initialize():
-  return [(np.random.random_integers(n)-1, np.random.random_integers(m)-1) for num in range(Bn)]
-  #return [(n // 2,m // 2) for num in range(Bn)]
+  #return [(np.random.random_integers(n)-1, np.random.random_integers(m)-1) for num in range(Bn)]
+  return [(n // 2,m // 2) for num in range(Bn)]
 
 def process(bears, k):
   if k % redraw == 0:
@@ -38,14 +38,14 @@ def process(bears, k):
 def getPotential():
   PP = np.zeros([n,m])
   # this example will cause a net migration to the right with some arbitrary potential wells
-  #for i in range(m):
-    #PP[:,i] = -i/3.
+  for i in range(m):
+    PP[:,i] = -i/3.
 
   #addLinearWell(PP, (n // 2,     m // 3    ), m / 2, .3 ) 
   #addLinearWell(PP, (3 * n // 4, 2 * m // 3), m / 4, .5  ) 
   #addLinearWell(PP, (n // 4,     2 * m // 3), m / 4, .5  ) 
 
-  addLinearWellLine(PP, (n // 2,     0), (n // 2,     m), m / 4, 1  ) 
+  #addLinearWellLine(PP, (n // 2,     0), (n // 2,     m), m / 4, 1  ) 
   #addLinearWellLine(PP, (0,     m // 2), (n,     m // 2), n / 4, 1  ) 
   #addLinearWell(PP, (n // 2,     m // 2), m / 4, -1  ) 
   # not exactly a cross but close
@@ -167,18 +167,25 @@ def colormap(i):
   else:
     return colormap[-1]
 
-def symbolmap(i):
+def symbolmap(bears, potential):
   head = '.x*'
-  if i < len(head):
-    return head[i]
+  heightmap = ",.-*'\"^"
+  if bears == 0:
+    if (PP.max()-PP.min()) == 0:
+      return head[0]
+    i = int( len (heightmap) * (potential-PP.min()) / (PP.max()-PP.min())) 
+    i = i if i < len(heightmap) else len(heightmap)-1
+    return heightmap[i]
+  elif bears < len(head):
+    return head[bears]
   else: 
-    return str(i)
+    return str(bears)
 
 def prettyprint(bears):
   Bmap = getBmap(bears)
   for i in range(n):
     for j in range(m):
-      print colormap(Bmap[i,j]) + symbolmap(Bmap[i,j]),
+      print colormap(Bmap[i,j]) + symbolmap(Bmap[i,j], PP[i,j]),
     print
 
 if __name__ == "__main__":
