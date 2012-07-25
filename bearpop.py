@@ -1,9 +1,11 @@
+#!/usr/bin/python2
+
 import numpy as np
 import time
 
 n = 21 # rows
 m = 21 # columns
-v = 0.001 # bear velocity (cycles/bears)
+v = 0.002 # bear velocity (cycles/bears)
 N = 10000 # number of time cycles
 Bn = 100 # number of bears
 
@@ -16,8 +18,8 @@ def Pmove(Nfrom, Nto, Bmap):
 bearmaxinit=3
 # return list of tuples of initial bear locations
 def initialize():
-  return [(np.random.random_integers(n)-1, np.random.random_integers(m)-1) for num in range(Bn)]
-  #return [(10,10) for num in range(Bn)]
+  # return [(np.random.random_integers(n)-1, np.random.random_integers(m)-1) for num in range(Bn)]
+  return [(10,10) for num in range(Bn)]
 
 def process(bears, k):
   print k
@@ -102,17 +104,19 @@ def getBmap(bears):
   return Bmap
 
 def colormap(i):
-  colormap = ['gray', 'white', 'yellow', 'red', 'green', 'cyan', 'blue', 'magenta']
+  colormap = ['\033[022m\033[39m', '\033[1m\033[32m', '\033[1m\033[31m', '\033[1m\033[35m', '\033[1m\033[34m']
   if i<len(colormap):
     return colormap[i]
   else:
-    return 'magenta'
+    return colormap[-1]
 
 def prettyprint(bears):
   Bmap = getBmap(bears)
   for i in range(n):
     for j in range(m):
-      print colored('{0:{width}}'.format(Bmap[i,j], width=1), colormap(Bmap[i,j])),
+      print '{0}{1:{width}}'.format(colormap(Bmap[i,j]), Bmap[i,j], 
+          # width = len(str(max(Bmap[:,j])))),
+          width=1),
     print
 
 
