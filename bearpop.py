@@ -2,6 +2,7 @@
 
 import numpy as np
 import time
+import string
 
 n = 21 # rows
 m = 21 # columns
@@ -110,13 +111,18 @@ def colormap(i):
   else:
     return colormap[-1]
 
+def symbolmap(i):
+  head = '.x*'
+  if i < len(head):
+    return head[i]
+  else: 
+    return str(i)
+
 def prettyprint(bears):
   Bmap = getBmap(bears)
   for i in range(n):
     for j in range(m):
-      print '{0}{1:{width}}'.format(colormap(Bmap[i,j]), Bmap[i,j], 
-          # width = len(str(max(Bmap[:,j])))),
-          width=1),
+      print colormap(Bmap[i,j]) + symbolmap(Bmap[i,j]),
     print
 
 
