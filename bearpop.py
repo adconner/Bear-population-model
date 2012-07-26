@@ -38,8 +38,8 @@ def process(bears, k):
 def getPotential():
   PP = np.zeros([n,m])
   # this example will cause a net migration to the right with some arbitrary potential wells
-  #for i in range(m):
-  #  PP[:,i] = -i/3.
+  for i in range(m):
+    PP[:,i] = -i/15.
 
   #addLinearWell(PP, (n // 2,     m // 3    ), m / 2, .3 ) 
   #addLinearWell(PP, (3 * n // 4, 2 * m // 3), m / 4, .5  ) 
@@ -50,8 +50,8 @@ def getPotential():
   #addLinearWell(PP, (n // 2,     m // 2), m / 4, -1  ) 
   # not exactly a cross but close
 
-  addLinearWellLine(PP, (n // 2,     m//4), (n // 2,     3*m//4 ), m / 4, 1  ) 
-  #addLinearWellLine(PP, (0,     0), (n,     m), m / 4, 1  ) 
+  addLinearWellLine(PP, (0,     3 * m//4), (n,     3*m//4 ), 3, -1  ) 
+  addLinearWell(PP, (n//2, 3 * m//4), 3, 1)
 
   return PP
 
@@ -174,7 +174,7 @@ def colormap(i):
 
 def symbolmap(bears, potential):
   head = '.x*'
-  heightmap = " ,.-'\"^*%$#"
+  heightmap = " .,-'\"^*%$#"
   if bears == 0:
     if (PP.max()-PP.min()) == 0:
       return head[0]
