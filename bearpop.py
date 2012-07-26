@@ -8,7 +8,7 @@ m = 61 # columns
 v = 0.02 # bear velocity (cycles/bears)
 r = v/10 # probability of random walk in a direction
 N = 1000000 # number of time cycles
-Bn = 400 # number of bears
+Bn = n*m/10 # number of bears
 
 redraw = 15 # frequency of redraw
 
@@ -38,8 +38,8 @@ def process(bears, k):
 def getPotential():
   PP = np.zeros([n,m])
   # this example will cause a net migration to the right with some arbitrary potential wells
-  for i in range(m):
-    PP[:,i] = -i/3.
+  #for i in range(m):
+  #  PP[:,i] = -i/3.
 
   #addLinearWell(PP, (n // 2,     m // 3    ), m / 2, .3 ) 
   #addLinearWell(PP, (3 * n // 4, 2 * m // 3), m / 4, .5  ) 
@@ -49,6 +49,9 @@ def getPotential():
   #addLinearWellLine(PP, (0,     m // 2), (n,     m // 2), n / 4, 1  ) 
   #addLinearWell(PP, (n // 2,     m // 2), m / 4, -1  ) 
   # not exactly a cross but close
+
+  addLinearWellLine(PP, (n // 2,     m//4), (n // 2,     3*m//4 ), m / 4, 1  ) 
+  #addLinearWellLine(PP, (0,     0), (n,     m), m / 4, 1  ) 
 
   return PP
 
@@ -133,30 +136,32 @@ def getBmap(bears):
     Bmap[b] += 1
   return Bmap
 
-def l2(i, j):
+def l2dist(i, j):
   return ((i[0]-j[0])**2 + (i[1]-j[1])**2)**.5
 
 # Potential well, center, radius, slope
 def addLinearWell(PP, i, r, a):
   for j in [(x,y) for x in range(n) for y in range(m)]:
-    d = l2(i,j)
+    d = l2dist(i,j)
     if d <= r:
       PP[j] -= a * (r - d)
 
 def addLinearWellLine(PP, start, end, r, a):
   start = np.array(start, 'f')
   end = np.array(end, 'f')
-  dse = l2(start, end)
+  dse = l2dist(start, end)
   unitdiff = (end - start) / dse
-  for j in [np.array([x,y]) for x in range(n) for y in range(m)]:
-    proj = j.dot(unitdiff)
+  for j in [(x,y) for x in range(n) for y in range(m)]:
+    jt = np.array(j,'f') - start
+    proj = jt.dot(unitdiff)
+    d=0
     if proj <= 0:
-      d = l2(start, j)
+      d = l2dist(start, j)
     elif proj<= dse:
-      orth = j - proj * unitdiff
+      orth = jt - proj * unitdiff
       d = orth.dot(orth) ** 0.5
     else:
-      d = l2(end, j)
+      d = l2dist(end, j)
     if d <= r:
       PP[j] -= a * (r - d)
 
@@ -169,7 +174,7 @@ def colormap(i):
 
 def symbolmap(bears, potential):
   head = '.x*'
-  heightmap = ",.-*'\"^"
+  heightmap = " ,.-'\"^*%$#"
   if bears == 0:
     if (PP.max()-PP.min()) == 0:
       return head[0]
