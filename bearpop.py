@@ -2,14 +2,22 @@
 
 import numpy as np
 import time
+from subprocess import call
+from math import log
 
-n = 31 # rows
-m = 31 # columns
+timeFile = "timeintervals.data"
+picfolder = "outfiles"
+picbase = "pic"
+remake = ".remake"
+
+n = 51 # rows
+m = 51 # columns
 v = 0.02 # bear velocity (cycles/bears)
 r = v/10 # probability of random walk in a direction
-N = 1000000 # number of time cycles
+N = 500000 # number of time cycles
 Bn = n*m/10 # number of bears
 
+timemult = 100
 redraw = 15 # frequency of redraw
 
 # potential matrix, high values are undesirable (unstable)
@@ -29,11 +37,20 @@ def initialize():
   #return [(np.random.random_integers(n)-1, np.random.random_integers(m)-1) for num in range(Bn)]
   return [(n // 2,m // 2) for num in range(Bn)]
 
+
+call(["mkdir", "-p", picfolder])
+timeIntervalF = open(timeFile, 'w')
+call(["touch", remake])
 def process(bears, k, Rk):
-  if k % redraw == 0:
-    print k, Rk
-    prettyprint(bears)
-    # time.sleep(0.01)
+  tk = int(round(timeInterval(Rk)*timemult))
+  tk = tk if tk>0 else 1
+  timeIntervalF.write(str(k) + ' ' + str(tk) + '\n')
+  prettyprint(bears)
+  print
+  print
+  time.sleep(0.1)
+  call(["scrot", "-e", "mv $f " + picfolder + "/" + picbase + str(k) + ".png"])
+
 
 def getPotential():
   PP = np.zeros([n,m])
@@ -67,6 +84,7 @@ def main():
   PP = getPotential()
 
   for k in range(N):
+    Rk = 0
     for bi in range(len(bears)):
       Pu = Pd = Pl = Pr = 0
       if bears[bi][0]>0:
@@ -78,7 +96,7 @@ def main():
       if bears[bi][1]<m-1:
         Pr = Pmove(bears[bi], (bears[bi][0], bears[bi][1] + 1), Bmap)
 
-      Rk = Pl + Pr + Pu + Pd
+      Rk += Pl + Pr + Pu + Pd
 
       move = choose([Pu, Pd, Pl, Pr])
 
@@ -108,6 +126,9 @@ def main():
 
 
 # Utility functions below
+
+def timeInterval(Rk):
+  return -log(np.random.rand()) / Rk
 
 # Heaviside function
 def H(x):
