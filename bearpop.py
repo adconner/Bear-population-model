@@ -3,8 +3,8 @@
 import numpy as np
 import time
 
-n = 61 # rows
-m = 61 # columns
+n = 31 # rows
+m = 31 # columns
 v = 0.02 # bear velocity (cycles/bears)
 r = v/10 # probability of random walk in a direction
 N = 1000000 # number of time cycles
@@ -50,8 +50,8 @@ def getPotential():
   #addLinearWell(PP, (n // 2,     m // 2), m / 4, -1  ) 
   # not exactly a cross but close
 
-  addLinearWellLine(PP, (0,     3 * m//4), (n,     3*m//4 ), 3, -1  ) 
-  addLinearWell(PP, (n//2, 3 * m//4), 3, 1)
+  addLinearWellLine(PP, (0,     3 * m//4), (n,     3*m//4 ), 2, -1  ) 
+  addLinearWell(PP, (n//2, 3 * m//4), 2, 1)
 
   return PP
 

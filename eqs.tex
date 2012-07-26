@@ -1,0 +1,26 @@
+\documentclass{article}
+\usepackage{amsmath, amsthm, amssymb, times}
+
+\let\originalleft\left
+\let\originalright\right
+\renewcommand{\left}{\mathopen{}\mathclose\bgroup\originalleft}
+\renewcommand{\right}{\aftergroup\egroup\originalright}
+
+\begin{document}
+Let $B_{ijk}^r$ (resp. $B_{ijk}^l$, $B_{ijk}^u$, $B_{ijk}^d$) be the probability that a bear at location $(i,j)$ moves right (resp. left, up, down) in time interval $t_k$. 
+\begin{align}
+  B_{ijk}^r&= v \left( N_{ij}(t_k)-N_{(i+1)j}(t_k)\right)\cdot H\left((N_{ij}(t_k)-N_{(i+1)j}(t_k)\right) \\
+  B_{ijk}^l&= v \left( N_{ij}(t_k)-N_{(i-1)j}(t_k)\right)\cdot H\left((N_{ij}(t_k)-N_{(i-1)j}(t_k)\right) \\
+  B_{ijk}^u&= v \left( N_{ij}(t_k)-N_{i(j+1)}(t_k)\right)\cdot H\left((N_{ij}(t_k)-N_{i(j+1)}(t_k)\right) \\
+  B_{ijk}^d&= v \left( N_{ij}(t_k)-N_{i(j-1)}(t_k)\right)\cdot H\left((N_{ij}(t_k)-N_{i(j-1)}(t_k)\right)
+\end{align}
+\begin{align}
+  R_{ijk}=B_{ijk}^r+B_{ijk}^l+B_{ijk}^u+B_{ijk}^d \\
+  R_k = \sum_{i,j} R_{ijk} \\
+  S_k =\frac{|\log Y|}{R_k},
+\end{align}
+where $Y$ is a random variable uniformly distributed on $[0,1]$. $S_k$ is a random variable so that $t_{k+1} = t_k + S_k$.
+
+\end{document}
+
+% vim: ai
