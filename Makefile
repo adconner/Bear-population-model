@@ -1,9 +1,11 @@
-videoout=out.avi
-timeFile=timeintervals.data
+videoout=bearpop.avi
+fps = 46
+
+timefile=timeintervals.data
 picfolder=outfiles
 picbase=pic
+
 remake=.remake
-fps=1
 
 all: eqs.pdf
 
@@ -13,7 +15,7 @@ eqs.pdf: eqs.tex
 	pdflatex $<
 
 $(videoout): $(remake)
-	mencoder "mf://$(picfolder)/*.png" -ovc lavc -mf fps=$(fps) -o $(videoout)
+	mencoder "mf://$(picfolder)/*.png" -ovc copy -mf fps=$(fps) -o $(videoout)
 
 $(remake):
 	touch $(remake)

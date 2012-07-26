@@ -41,12 +41,15 @@ def initialize():
 call(["mkdir", "-p", picfolder])
 timeIntervalF = open(timeFile, 'w')
 call(["touch", remake])
+cumt = 0
 def process(bears, k, Rk):
+  global cumt
   tk = int(round(timeInterval(Rk)*timemult))
   tk = tk if tk>0 else 1
+  cumt += tk
   timeIntervalF.write(str(k) + ' ' + str(tk) + '\n')
+  print cumt
   prettyprint(bears)
-  print
   print
   time.sleep(0.1)
   call(["scrot", "-e", "mv $f " + picfolder + "/" + picbase + str(k) + ".png"])
@@ -190,7 +193,7 @@ def colormap(i):
     return colormap[-1]
 
 def symbolmap(bears, potential):
-  head = '.x*'
+  head = '.x*3456789H'
   heightmap = " .,-'^\"*%$#"
   if bears == 0:
     if (PP.max()-PP.min()) == 0:
@@ -198,10 +201,10 @@ def symbolmap(bears, potential):
     i = int( len (heightmap) * (potential-PP.min()) / (PP.max()-PP.min())) 
     i = i if i < len(heightmap) else len(heightmap)-1
     return heightmap[i]
-  elif bears < len(head):
+  elif bears < 10:
     return head[bears]
   else: 
-    return str(bears)
+    return head[10]
 
 def prettyprint(bears):
   Bmap = getBmap(bears)
