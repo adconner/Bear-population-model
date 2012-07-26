@@ -29,9 +29,9 @@ def initialize():
   #return [(np.random.random_integers(n)-1, np.random.random_integers(m)-1) for num in range(Bn)]
   return [(n // 2,m // 2) for num in range(Bn)]
 
-def process(bears, k):
+def process(bears, k, Rk):
   if k % redraw == 0:
-    print k
+    print k, Rk
     prettyprint(bears)
     # time.sleep(0.01)
 
@@ -66,9 +66,7 @@ def main():
   global PP
   PP = getPotential()
 
-  R = []
   for k in range(N):
-    R.append(0)
     for bi in range(len(bears)):
       Pu = Pd = Pl = Pr = 0
       if bears[bi][0]>0:
@@ -80,7 +78,7 @@ def main():
       if bears[bi][1]<m-1:
         Pr = Pmove(bears[bi], (bears[bi][0], bears[bi][1] + 1), Bmap)
 
-      R[k] += Pl + Pr + Pu + Pd
+      Rk = Pl + Pr + Pu + Pd
 
       move = choose([Pu, Pd, Pl, Pr])
 
@@ -106,9 +104,7 @@ def main():
         bears[bi] = (bears[bi][0], bears[bi][1] + 1)
         Bmap[bears[bi]] += 1
 
-    process(bears, k)
-
-  return R
+    process(bears, k, Rk)
 
 
 # Utility functions below
