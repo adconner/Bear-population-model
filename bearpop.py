@@ -174,7 +174,7 @@ def colormap(i):
 
 def symbolmap(bears, potential):
   head = '.x*'
-  heightmap = " .,-'\"^*%$#"
+  heightmap = " .,-'^\"*%$#"
   if bears == 0:
     if (PP.max()-PP.min()) == 0:
       return head[0]
