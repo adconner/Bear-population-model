@@ -1,0 +1,36 @@
+Copyright (c) 2012, Austin Conner
+see LICENSE file
+
+This is a diffusion model of bear population movement. Model parameters
+are in the top of bearpop.py. By default, simply print a visual
+representation of the population. For other functions, write them into
+the corresponding hook methods at the top of bearpop.py.
+
+
+installation:
+Navigate to directory which will contain project, then run
+
+  git clone git://github.com/vujazzman/Bear-population-model
+
+After this there should be a new folder called Bear-population-model in
+the current directory containing the project files.
+
+
+to run:
+  python2 bearpop.py
+  python bearpop.py
+  ./bearpop.py
+
+depending on your distribution
+
+
+dependencies:
+  python 2.7.x
+  numpy
+  ansi compliant color terminal
+
+
+tested on:
+  python 2.7.3
+  numpy 1.6.2
+  urxvt 9.15

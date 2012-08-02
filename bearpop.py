@@ -1,5 +1,8 @@
 #!/usr/bin/python2
 
+# Copyright (c) 2012, Austin Conner
+# see LICENSE file
+
 import numpy as np
 import time
 from subprocess import call
@@ -38,21 +41,22 @@ def initialize():
   return [(n // 2,m // 2) for num in range(Bn)]
 
 
-call(["mkdir", "-p", picfolder])
-timeIntervalF = open(timeFile, 'w')
-call(["touch", remake])
+# call(["mkdir", "-p", picfolder])
+# timeIntervalF = open(timeFile, 'w')
+# call(["touch", remake])
 cumt = 0
 def process(bears, k, Rk):
   global cumt
   tk = int(round(timeInterval(Rk)*timemult))
   tk = tk if tk>0 else 1
   cumt += tk
-  timeIntervalF.write(str(k) + ' ' + str(tk) + '\n')
-  print cumt
-  prettyprint(bears)
-  print
-  time.sleep(0.1)
-  call(["scrot", "-e", "mv $f " + picfolder + "/" + picbase + str(k) + ".png"])
+  if k % redraw == 0:
+    # timeIntervalF.write(str(k) + ' ' + str(tk) + '\n')
+    print cumt
+    prettyprint(bears)
+    print
+    # time.sleep(0.1)
+    # call(["scrot", "-e", "mv $f " + picfolder + "/" + picbase + str(k) + ".png"])
 
 
 def getPotential():
